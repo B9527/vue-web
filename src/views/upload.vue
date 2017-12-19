@@ -12,12 +12,12 @@
             </el-select>
         </el-form-item></br>
         <el-form-item  label="请 选 择 文 件：">
-           <el-input type="file" name="file" style="width:200px">
-                          </el-input>
+           <input type="file" name="file" style="width:200px" class="file" @change="getFile($event)"  />
+                          
         </el-form-item></br>
         <el-form-item  label=" 提   交： ">
            
-              <el-button type="primary" style="width:200px"  @click.native.prevent="handleSubmit" :loading="logining" >上传</el-button>
+              <el-button type="primary" style="width:200px" @click="submitForm($event)">上传</el-button>
         </el-form-item>            
     </el-form>
         
@@ -26,6 +26,7 @@
 
 
 <script>
+  import { requestLogin } from '../api/api';
   export default {
     data() {
       return {
@@ -49,14 +50,17 @@
        
     },
     methods: {
-      handleSubmit(ev) {
-        var _this = this;
-        this.$refs.ruleForm2.validate((valid) => {
-          if (valid) {
-            //_this.$router.replace('/table');
-            this.logining = true;
-            //NProgress.start();
-            var loginParams = { type: formInline.value, file: this.ruleForm2.checkPass };
+       getFile(event) {
+            this.file = event.target.files[0];
+            console.log(this.file);
+          },
+       submitForm(event) {
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append('type', this.formInline.value);
+            formData.append('file', this.file);
+            console.log(formData);
+            var loginParams = formData
             requestLogin(loginParams).then(data => {
               this.logining = false;
               //NProgress.done();
@@ -71,13 +75,35 @@
                 this.$router.push({ path: '/' });
               }
             });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      }
-
-    }
+    }   }
   }
 </script>
+
+<style scoped>
+.file {
+    position: relative;
+    display: inline-block;
+    background: #D0EEFF;
+    border: 1px solid #99D3F5;
+    border-radius: 4px;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+</style>
