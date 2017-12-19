@@ -8,6 +8,7 @@ import Main from '@/views/Main'
 import Upload from '@/views/upload'
 import ImportTaskList from '@/views/ImportTaskList'
 
+
 Vue.use(Router)
 
 export default new Router({

@@ -2,7 +2,7 @@
 <div id="upload_form" style="margin-top:5%;">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="请选择文件类型：">
-            <el-select v-model="formInline.value" placeholder="请选择" style="width:200px;">
+            <el-select v-model="formInline.value" placeholder="请选择" style="width:240px;">
                 <el-option
                 v-for="item in formInline.options"
                 :key="item.value"
@@ -26,7 +26,7 @@
 
 
 <script>
-  import { requestLogin } from '../api/api';
+  import { importUpload } from '../api/api';
   export default {
     data() {
       return {
@@ -60,19 +60,20 @@
             formData.append('type', this.formInline.value);
             formData.append('file', this.file);
             console.log(formData);
-            var loginParams = formData
-            requestLogin(loginParams).then(data => {
-              this.logining = false;
+            var uploadParams = formData
+            importUpload(uploadParams).then(data => {
               //NProgress.done();
-              let { msg, code, user } = data;
+              let { msg, code, result } = data;
               if (code !== 200) {
                 this.$message({
                   message: msg,
-                  type: 'error'
+                  type: 'error',
                 });
               } else {
-                sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/' });
+                this.$message({
+                  message: msg,
+                  type: 'success'
+                });
               }
             });
     }   }
