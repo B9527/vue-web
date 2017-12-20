@@ -7,6 +7,7 @@ import Home from '@/views/Home'
 import Main from '@/views/Main'
 import Upload from '@/views/upload'
 import ImportTaskList from '@/views/ImportTaskList'
+import TaskDetail from '@/views/TaskDetail'
 
 
 Vue.use(Router)
@@ -21,7 +22,7 @@ export default new Router({
       children: [
           { path: '/upload', component: Upload, name: '上传文件' },
           { path: '/task_list', component: ImportTaskList, name: '任务列表' },
-          {path: '/task_detail', component: ImportTaskList, name: '任务详细', hidden: true}
+          {path: '/task_detail', component: TaskDetail, name: '任务详细', hidden: true}
       ]
     },
     {

@@ -2,8 +2,8 @@
 <div style="margin-top:5%">
     <el-button @click="DeleteSelection" >删除</el-button>
     <el-button @click="SubmitSelection">执行</el-button>
-  <el-table :data="tableData" style="width: 100%" border :row-class-name="tableRowClassName"
-  show-overflow-tooltip  @selection-change="handleSelectionChange">
+  <el-table :data="tableData" style="width: 100%" border :row-class-name="tableRowClassName" element-loading-text="拼命加载中"
+  show-overflow-tooltip  @selection-change="handleSelectionChange" slot="empty" @row-dblclick="dataGotoDetail">
     <el-table-column
       type="selection"
       width="55">
@@ -50,15 +50,17 @@
 
 <script>
   import { getTaskList } from '../api/api';
+  import { deleteTaskList } from '../api/api';
+  import { ChangeStatusSubmit } from '../api/api'
   export default {
     data() {
       return {
         tableData: [
-          {'file_name':'name', 'read_table':'read_table', 'status':'upload', "id":1},
-          {'file_name':'name', 'read_table':'read_table', 'status':'success', "id":2},
-          {'file_name':'name', 'read_table':'read_table', 'status':'execting', "id":3},
-          {'file_name':'name', 'read_table':'read_table', 'status':'submit', "id":4},
-          {'file_name':'name', 'read_table':'read_table', 'status':'fail', "id":5}
+        //   {'file_name':'name', 'read_table':'read_table', 'status':'upload', "id":1},
+        //   {'file_name':'name', 'read_table':'read_table', 'status':'success', "id":2},
+        //   {'file_name':'name', 'read_table':'read_table', 'status':'execting', "id":3},
+        //   {'file_name':'name', 'read_table':'read_table', 'status':'submit', "id":4},
+        //   {'file_name':'name', 'read_table':'read_table', 'status':'fail', "id":5}
 
         ],
          multipleSelection: []
@@ -75,7 +77,7 @@
                     type: 'error',
                     });
                   } else {
-                    this.tableData = result.task_list
+                    this.tableData = result.task_list;
                   }
                       });
                 })
@@ -85,6 +87,85 @@
         return row.status === value;
       },
       indexMethod(index) {
+		  
+        return index + 1;
+    
+      },
+      tableRowClassName({row, rowIndex}) {
+        if (row.status === 'fail') {
+          return 'fail-row';
+        } else if (row.status === 'success') {
+          return 'success-row';
+        } else if (row.status === 'execting') {
+          return 'warning-row';
+        } else if (row.status === 'submit') {
+          return 'info-row';
+        }
+        return '';
+      },
+       handleSelectionChange(val) {
+        this.multipleSelection = val;
+        console.log(this.multipleSelection);
+      },
+      DeleteSelection() {
+		var dele_data_list = this.multipleSelection;
+		var request_delete_list = [];
+		for (var i=0; i<dele_data_list.length;i++){
+			request_delete_list.push(dele_data_list[i].id)
+			for (var j=0;j<this.tableData.length;j++){
+				if (this.tableData[j] ===dele_data_list[i]){
+					console.log(j);
+					this.tableData.splice(j,1);
+				}
+			}
+
+		}
+		let formData = new FormData();
+		formData.append('request_delete_list',JSON.stringify(request_delete_list));
+		deleteTaskList(formData).then(data => {
+                  let { msg, code, result } = data;
+                  if (code !== 200) {
+                    this.$message({
+                    message: msg,
+                    type: 'error',
+                    });
+                  } else {
+                    this.$message({
+					message: msg,
+					type: 'success',
+					});
+                  }
+            });
+      },
+      SubmitSelection() {
+        var submit_data_list = this.multipleSelection;
+		var request_submit_list = [];
+		for (var i=0; i<submit_data_list.length;i++){
+			request_submit_list.push(submit_data_list[i].id)
+			for (var j=0;j<this.tableData.length;j++){
+				if (this.tableData[j] ===submit_data_list[i]){
+					this.tableData[j].status = 'submit';
+				}
+			}
+		}
+		let formData = new FormData();
+		formData.append('request_submit_list',JSON.stringify(request_submit_list));
+		ChangeStatusSubmit(formData).then(data => {
+                  let { msg, code, result } = data;
+                  if (code !== 200) {
+                    this.$message({
+                    message: msg,
+                    type: 'error',
+                    });
+                  } else {
+                    this.$message({
+					message: msg,
+					type: 'success',
+					});
+                  }
+            });
+	  },
+	  dataGotoDetail(row){
           function contains(arr, obj) {
           var i = arr.length;
           while (i--) {
@@ -94,39 +175,19 @@
           }
           return false;
           }
-          var task_id = this.tableData[index].id
-          var task_status = this.tableData[index].status
-          var status_arry = ['execting', 'success', 'fail']
-          var string = "/task_detail?id=" +task_id
+          var task_id = row.id;
+          var task_status = row.status;
+          var status_arry = ['execting', 'success', 'fail'];
+          var router_string = "/task_detail?id=" +task_id;
           if (contains(status_arry, task_status)){
-          return  <router-link to = {string}>{index + 1}</router-link>
+			this.$router.push(router_string);
           } else {
-             return index + 1
+			this.$message({
+				message:"执行中的,执行过的任务才有任务详情!",
+				type:"error",
+			});
           }
-      },
-      tableRowClassName({row, rowIndex}) {
-        if (row.status === 'fail') {
-          return 'fail-row';
-        } else if (row.status === 'success') {
-          return 'success-row';
-        } else if (row.status === 'execting') {
-          return 'warning-row'
-        } else if (row.status === 'submit') {
-          return 'info-row'
-        }
-        return '';
-      },
-       handleSelectionChange(val) {
-        this.multipleSelection = val;
-        // console.log(this.multipleSelection)
-      },
-      DeleteSelection() {
-        console.log(this.multipleSelection)
-      },
-      SubmitSelection() {
-        console.log(this.multipleSelection)
-      }
-
+	  },
     }
   }
 </script>
