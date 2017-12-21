@@ -2,7 +2,7 @@
 <div id="upload_form" style="margin-top:5%;">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="请选择文件类型：">
-            <el-select v-model="formInline.value" placeholder="请选择" style="width:240px;">
+            <el-select v-model="formInline.value" placeholder="请选择类型" style="width:240px;">
                 <el-option
                 v-for="item in formInline.options"
                 :key="item.value"

@@ -1,8 +1,8 @@
 <template>
     <div class="navbar navbar-default" id="navbar_id" style="display:block;">
     <ul class="nav nav-tabs" >
-        <li :class="item.class_name" v-for="item in nav_list" :key="item.link">
-            <a :href="item.link" class="nav-link">{{ item.name }}</a>
+        <li class="nav-item" v-for="item in nav_list" :key="item.link">
+            <a @click="Golink(item.link)" :class="item.class_name">{{ item.name }}</a>
         </li>
 
     </ul>
@@ -13,11 +13,27 @@ export default {
   data() {
       return {
           nav_list:[
-              {"link":"#1", "name":"Reader", "class_name": "nav-item"},
-              {"link":"#2", "name":"Writer", "class_name": "nav-item"},
-              {"link":"#3", "name":"Transform", "class_name": "nav-item"},
-              {"link":"#4", "name":"返回列表","class_name": "nav-item"},
+              {"link":"/cleanHome", "name":"Home", "class_name": "nav-link "},
+              {"link":"/cleanReader", "name":"Reader", "class_name": "nav-link"},
+              {"link":"/cleanWriter", "name":"Writer", "class_name": "nav-link"},
+              {"link":"/cleanTransform", "name":"Transform", "class_name": "nav-link"},
           ]
+      }
+  },
+  	mounted: function() {
+            this.$nextTick(function () {
+                let route_path = this.$route.path;
+                console.log(route_path);
+                for (let i=0;i<this.nav_list.length;i++){
+                   if(route_path === this.nav_list[i].link){
+                       this.nav_list[i].class_name = "nav-link active";
+                   }
+                }
+            })
+      },
+  methods: {
+      Golink: function(link) {
+         this.$router.push({ path: link });
       }
   }
 }

@@ -11,6 +11,9 @@ import TaskDetail from '@/views/TaskDetail'
 import cleanUpload from '@/views/cleanUpload'
 import cleanTaskList from '@/views/cleanTaskList'
 import cleanTaskDetail from '@/views/cleanTaskDetail'
+import cleanReader from '@/views/cleanReader'
+import cleanWriter from '@/views/cleanWriter'
+import cleanTransform from '@/views/cleanTransform'
 
 
 Vue.use(Router)
@@ -36,7 +39,10 @@ export default new Router({
       children: [
           { path: '/cleanUpload', component: cleanUpload, name: '上传清洗结构' },
           { path: '/cleanTaskList', component: cleanTaskList, name: '清洗任务列表' },
-          { path: '/cleanTaskDetail', component: cleanTaskDetail, name: '清洗任务详情', hidden: true }
+          { path: '/cleanHome', component: cleanTaskDetail, name: '清洗任务详情', hidden: true },
+          {path: '/cleanReader', component: cleanReader, name: 'reader', hidden: true},
+          {path: '/cleanWriter', component: cleanWriter, name: 'writer', hidden: true},
+          {path: '/cleanTransform', component: cleanTransform, name: 'trandform', hidden: true},
       ]
     },
     {
