@@ -1,5 +1,5 @@
 <template>
-<div >
+<div>
   <div>
     <el-button @click="DeleteSelection" >删除</el-button>
     <el-button @click="SubmitSelection">执行</el-button>
@@ -13,9 +13,9 @@
     </el-table-column>
     <el-table-column prop="file_name" label="file_name" width="100">
     </el-table-column>
-    <el-table-column prop="read_table" label="read_table">
+    <el-table-column prop="database" label="database">
     </el-table-column>
-	 <el-table-column prop="write_table" label="write_table">
+	 <el-table-column prop="table" label="table">
     </el-table-column>
 	<el-table-column prop="start_time" label="start_time">
     </el-table-column>
@@ -62,9 +62,9 @@
 </template>
 
 <script>
-  import { getTaskList } from '../api/api';
-  import { deleteTaskList } from '../api/api';
-  import { ChangeStatusSubmit } from '../api/api'
+  import { getCleanTaskList } from '../api/api';
+  import { cleanTaskDelete } from '../api/api';
+  import { cleanStatusSubmit } from '../api/api'
   export default {
     data() {
       return {
@@ -88,7 +88,7 @@
 	},
 	mounted: function() {
             this.$nextTick(function () {
-                getTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize, status:this.status}}).then(data => {
+                getCleanTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize, status:this.status}}).then(data => {
 						      //NProgress.done();
                   let { msg, code, result } = data;
                   if (code !== 200) {
@@ -107,7 +107,7 @@
             },
     methods: {
       loadData: function(){
-          getTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize,status:this.status}}).then(data => {
+          getCleanTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize,status:this.status}}).then(data => {
 						      //NProgress.done();
                   let { msg, code, result } = data;
                   if (code !== 200) {
@@ -133,8 +133,9 @@
       },
       filterTag(value, row) {
         this.status = value;
+        // this.total = (row.status === value).length
+        // console.log((row.status === value).length)
         return row.status === value;
-        // this.loadData();
       },
       indexMethod(index) {
         var base_bum = (this.currentPage-1)*(this.pageSize);
@@ -172,7 +173,7 @@
 		}
 		let formData = new FormData();
 		formData.append('request_delete_list',JSON.stringify(request_delete_list));
-		deleteTaskList(formData).then(data => {
+		cleanTaskDelete(formData).then(data => {
                   let { msg, code, result } = data;
                   if (code !== 200) {
                     this.$message({
@@ -180,6 +181,7 @@
                     type: 'error',
                     });
                   } else {
+                    this.loadData();  
                     this.$message({
 					message: msg,
 					type: 'success',
@@ -200,7 +202,7 @@
 		}
 		let formData = new FormData();
 		formData.append('request_submit_list',JSON.stringify(request_submit_list));
-		ChangeStatusSubmit(formData).then(data => {
+		cleanStatusSubmit(formData).then(data => {
                   let { msg, code, result } = data;
                   if (code !== 200) {
                     this.$message({
@@ -216,27 +218,11 @@
             });
 	  },
 	  dataGotoDetail(row){
-          function contains(arr, obj) {
-          var i = arr.length;
-          while (i--) {
-            if (arr[i] === obj) {
-              return true;
-            }
-          }
-          return false;
-          }
-          var task_id = row.id;
-          var task_status = row.status;
-          var status_arry = ['execting', 'success', 'fail'];
-          var router_string = "/task_detail?id=" +task_id;
-          if (contains(status_arry, task_status)){
-			this.$router.push(router_string);
-          } else {
-			this.$message({
-				message:"执行中的,执行过的任务才有任务详情!",
-				type:"info",
-			});
-          }
+        var task_id = row.id;
+        var router_string = "/cleanTaskDetail?id=" +task_id;
+        this.$router.push(router_string);
+			
+
 	  },
     }
   }

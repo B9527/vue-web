@@ -13,3 +13,7 @@ export const getTaskList = params => { return axios.get(`${base}/import-data/tas
 export const deleteTaskList = params => {return axios.post(`${base}/import-data/delete_task_view/`, params).then(res => res.data)};
 export const ChangeStatusSubmit = params => {return axios.post(`${base}/import-data/change_status_submit/`, params).then(res => res.data)};
 export const getTaskRecord = params => { return axios.post(`${base}/import-data/task/record/`,params).then(res => res.data); };
+export const cleanUpload = params => { return axios.post(`${base}/clean-data/upload/`, params, config).then(res => res.data); };
+export const getCleanTaskList = params => { return axios.get(`${base}/clean-data/task/list/`,params).then(res => res.data); };
+export const cleanStatusSubmit = params => {return axios.post(`${base}/clean-data/task/resubmit/`, params).then(res => res.data)};
+export const cleanTaskDelete = params => {return axios.post(`${base}/clean-data/task/delete/`, params).then(res => res.data)};

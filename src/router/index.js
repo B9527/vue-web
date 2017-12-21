@@ -8,6 +8,9 @@ import Main from '@/views/Main'
 import Upload from '@/views/upload'
 import ImportTaskList from '@/views/ImportTaskList'
 import TaskDetail from '@/views/TaskDetail'
+import cleanUpload from '@/views/cleanUpload'
+import cleanTaskList from '@/views/cleanTaskList'
+import cleanTaskDetail from '@/views/cleanTaskDetail'
 
 
 Vue.use(Router)
@@ -17,22 +20,23 @@ export default new Router({
     {
       path: '/',
       component: Home,
-      name: '数据导入',
+      name: '数据导入模块',
       iconCls: 'el-icon-menu',//图标样式class
       children: [
-          { path: '/upload', component: Upload, name: '上传文件' },
-          { path: '/task_list', component: ImportTaskList, name: '任务列表' },
-          {path: '/task_detail', component: TaskDetail, name: '任务详细', hidden: true}
+          { path: '/upload', component: Upload, name: '导入数据来源' },
+          { path: '/task_list', component: ImportTaskList, name: '导入任务列表' },
+          {path: '/task_detail', component: TaskDetail, name: '导入任务详细', hidden: true}
       ]
     },
     {
       path: '/',
       component: Home,
-      name: '数据清洗',
+      name: '数据清洗模块',
       iconCls: 'el-icon-setting',
       children: [
-          { path: '/page4', component: Main, name: '上传文件' },
-          { path: '/page5', component: Main, name: '清洗列表' }
+          { path: '/cleanUpload', component: cleanUpload, name: '上传清洗结构' },
+          { path: '/cleanTaskList', component: cleanTaskList, name: '清洗任务列表' },
+          { path: '/cleanTaskDetail', component: cleanTaskDetail, name: '清洗任务详情', hidden: true }
       ]
     },
     {
