@@ -1,8 +1,11 @@
 <template>
 <div >
-  <div>
-    <el-button @click="DeleteSelection" >删除</el-button>
-    <el-button @click="SubmitSelection">执行</el-button>
+  
+    <div style="margin-bottom:20px">
+      <el-button @click="DeleteSelection" >删除</el-button>
+      <el-button @click="SubmitSelection">执行</el-button>
+      <el-input style="width:160px; float:left; margin-left:5%" v-model="tableData.search"></el-input><el-button type="primary" icon="el-icon-search" style="float: left;" @click="GoSearch">搜索</el-button>
+    <div>
   <el-table :data="tableData" style="width: 100%" border :row-class-name="tableRowClassName" element-loading-text="拼命加载中"
   show-overflow-tooltip  @selection-change="handleSelectionChange" slot="empty" @row-dblclick="dataGotoDetail">
     <el-table-column
@@ -46,6 +49,7 @@
       </template>
     </el-table-column>  
   </el-table>
+    </div>
   </div>
    <div class="block" style="margin-top:20px;margin-bottom:10px;">
     <el-pagination
@@ -81,6 +85,7 @@
         total:20,
         pageSize:20,
         status:'all',
+        search:'',
 
 
 
@@ -237,7 +242,26 @@
 				type:"info",
 			});
           }
-	  },
+    },
+    GoSearch(){
+      let search_data = this.tableData.search;
+      getTaskList({params:{search_data:search_data,}}).then(data => {
+						      //NProgress.done();
+                  let { msg, code, result } = data;
+                  if (code !== 200) {
+                    this.$message({
+                    message: msg,
+                    type: 'error',
+                    });
+                  } else {
+                    this.tableData = result.task_list;
+                    this.currentPage4 = result.pageNum
+                    this.pageSize = result.pageSize
+                    this.total = result.total
+                  }
+              });
+
+    }
     }
   }
 </script>

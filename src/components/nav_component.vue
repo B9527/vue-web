@@ -33,7 +33,9 @@ export default {
       },
   methods: {
       Golink: function(link) {
-         this.$router.push({ path: link });
+         let id = this.$route.query.id
+         let url_string = link + "?id=" + id 
+         this.$router.push({ path: url_string });
       }
   }
 }
