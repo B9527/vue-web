@@ -16,21 +16,21 @@
 
                 </tr>
                 </thead>
-                <tbody id="transform_table_content" v-for="item in transform" :key="item.order">
+                <tbody id="transform_table_content" v-for="(item, index) in transform" :key="item.order">
                 <tr>
-                    <td><el-input v-model="item.order" style="width:40px"></el-input>
+                    <td><el-input v-model="item.order" style="width:60px"></el-input>
                     </td>
                     <td><el-input v-model="item.path" ></el-input></td>
                     <td><el-input v-model="item.params"></el-input></td>
-                    <td> <el-button type="danger">删除</el-button></td>
+                    <td> <el-button type="danger" @click="TransDelete(index)">删除</el-button></td>
                 </tr>
                 </tbody>
             </table>
         </div>
 
         <br/>
-         <el-button type="primary">新增</el-button>
-        <el-button type="success">保存</el-button>
+         <el-button type="primary" @click="TransAdd">新增</el-button>
+        <el-button type="success" @click="TransSave">保存</el-button>
 
 
     </form>
@@ -43,6 +43,28 @@ import NavComponent from '@/components/nav_component'
     export default {
           components: {
               NavComponent,
+        },
+        mounted: function() {
+            this.$nextTick(function () {
+              this.LoadData();
+            })
+        },
+        methods: {
+            LoadData(){
+                alert("loaddata");
+            },
+            TransDelete(index){
+                this.transform.splice(index, 1);
+            },
+            TransAdd(){
+                let add_item =  {"path": "", "params": "", "order": this.transform.length +1 }
+                this.transform.push(add_item);
+            },
+            TransSave(){
+                let return_obj = this.transform;
+                console.log(JSON.stringify(return_obj));
+
+            },
         },
         data() {
             return {

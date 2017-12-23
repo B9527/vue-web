@@ -20,6 +20,7 @@ Vue.use(router)
 
 
 router.beforeEach((to, from, next) => {
+  // sessionStorage.setItem('user', JSON.stringify({"user":"baiyang"}));
   //NProgress.start();
   if (to.path == '/login') {
     sessionStorage.removeItem('user');

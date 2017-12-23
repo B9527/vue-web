@@ -93,21 +93,7 @@
 	},
 	mounted: function() {
             this.$nextTick(function () {
-                getTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize, status:this.status}}).then(data => {
-						      //NProgress.done();
-                  let { msg, code, result } = data;
-                  if (code !== 200) {
-                    this.$message({
-                    message: msg,
-                    type: 'error',
-                    });
-                  } else {
-                    this.tableData = result.task_list;
-                    this.currentPage4 = result.pageNum
-                    this.pageSize = result.pageSize
-                    this.total = result.total
-                  }
-                      });
+                this.loadData();
                 })
             },
     methods: {
