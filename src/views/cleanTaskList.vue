@@ -65,7 +65,7 @@
 <script>
   import { getCleanTaskList } from '../api/api';
   import { cleanTaskDelete } from '../api/api';
-  import { cleanStatusSubmit } from '../api/api'
+  import { cleanStatusSubmit } from '../api/api';
   export default {
     data() {
       return {

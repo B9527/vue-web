@@ -172,9 +172,9 @@
                     });
                   } else {
                     this.$message({
-					message: msg,
-					type: 'success',
-					});
+                    message: msg,
+                    type: 'success',
+					          });
                   }
             });
       },

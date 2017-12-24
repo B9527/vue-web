@@ -11,11 +11,11 @@
                     <div class="form-group row">
                         <label for="input_database" class="col-sm-2 col-form-label">Database:</label>
                         <div class="col-sm-10">
-                            <input name="database" class="form-control" id="input_database" v-model="reader.Database">
+                            <input name="database" class="form-control" id="input_database" v-model="reader.database">
                         </div>
                         <label for="input_table" class="col-sm-2 col-form-label">Table:</label>
                         <div class="col-sm-10">
-                            <input name="table" class="form-control" id="input_table" v-model="reader.Table">
+                            <input name="table" class="form-control" id="input_table" v-model="reader.table">
                         </div>
                         <br/>
                         <table class="table table-striped" id="clean_config_reader_writer">
@@ -27,7 +27,7 @@
                                     <th>option</th>
                                 </tr>
                             </thead>
-                            <tbody id="reader_content" v-for="(read_field, index) in reader.read_fields" :key=''> 
+                            <tbody id="reader_content" v-for="(read_field, index) in reader.fields" :key=''> 
                                 <tr >
                                     <td><p type="index"  style="width: 60px">{{index+1}}</p</td>
                                     <td><el-input  v-model="read_field.name" type="text"></el-input></td>
@@ -97,38 +97,61 @@
   </div>
 </template>
 <script>
-    import NavComponent from '@/components/nav_component'
+    import NavComponent from '@/components/nav_component';
+    import { CleanDetailGet } from '../api/api';
+    import { CleanDetailPost } from '../api/api';
+    import { CleanMapPost } from '../api/api';
     export default {
           components: {
               NavComponent,
         },
         mounted: function(){
-            this.loadReader();
-            this.loadMap();
+            this.loadData();
         },
         methods: {
-            loadReader(){
-                alert("load reader!");
-            },
-            loadMap(){
-                alert("load map!");
+            loadData(){
+                CleanDetailGet({params:{id: this.$route.query.id,}}).then(data => {
+                  let { msg, code, result } = data;
+                  if (code !== 200) {
+                    this.$message({
+                    message: msg,
+                    type: 'error',
+                    });
+                  } else {
+                    this.reader = result.reader;
+                    this.map_list = result.map_list;
+                  }
+                      });
             },
             ReaderDelete(index){
-                this.reader.read_fields.splice(index, 1);  
+                this.reader.fields.splice(index, 1);  
             },
             ReaderAdd(){
-                let add_item =  {"type": "", "name": "", "order": this.reader.read_fields.length +1 }
-                this.reader.read_fields.push(add_item);
+                let add_item =  {"type": "", "name": "", "order": this.reader.fields.length +1 }
+                this.reader.fields.push(add_item);
             },
             ReaderSave(){
-                let return_obj = {};
-                return_obj.Table = this.reader.Table;
-                return_obj.Database = this.reader.Database;
-                return_obj.read_fields = this.reader.read_fields;
-                console.log(JSON.stringify(return_obj));
+                let return_obj = this.reader;
+                let formData = new FormData();
+                formData.append('reader', JSON.stringify(return_obj));
+                formData.append('id', this.$route.query.id)
+                CleanDetailPost(formData).then(data =>{
+                    let { msg, code, result } = data;
+                    if (code !== 200) {
+                        this.$message({
+                        message: msg,
+                        type: 'error',
+                        });
+                    } else {
+                        this.$message({
+                        message: msg,
+                        type: 'success',
+                                });
+                    }
+                });
             },
             MapKeyAdd(index){
-                let add_item =  {"src_name": ""}
+                let add_item =  {"src_name": "", "index": index}
                 this.map_list.key_list.splice(index, 0, add_item);
             },
             MapKeyDelete(index){
@@ -143,86 +166,32 @@
             },
             MapDictSave(){
                 let return_obj = this.map_list;
-                console.log(JSON.stringify(return_obj));
+                let formData = new FormData();
+                formData.append('map_list', JSON.stringify(return_obj));
+                formData.append('id', this.$route.query.id)
+                CleanMapPost(formData).then(data =>{
+                    let { msg, code, result } = data;
+                    if (code !== 200) {
+                        this.$message({
+                        message: msg,
+                        type: 'error',
+                        });
+                    } else {
+                        this.$message({
+                        message: msg,
+                        type: 'success',
+                                });
+                    }
+                });
             }
         },
         data() {
             return {
                 map_list: {
-                    key_list: [ {"src_name":"illegal_num"}, 
-                                {"src_name":"written_decision_type"},
-                                {"src_name":"authenticate_report_num"},
-                                {"src_name":"written_decision_parity_bit"},
-                                {"src_name":"personnel_classify"}
-                                ],
-                    val_list: [ {"dst_name":"illegal_num"}, 
-                                {"dst_name":"written_decision_type"},
-                                {"dst_name":"authenticate_report_num"},
-                                {"dst_name":"written_decision_parity_bit"},
-                                {"dst_name":"personnel_classify"}
-                    ],
+                    key_list: [],
+                    val_list: [],
                 },
-                reader: {
-                    "Table": "Car_AAA_Crim_driverviolations",
-                    "read_fields": [
-                        {
-                            "type": "string",
-                            "name": "illegal_num",
-                            "order": 1
-                        },
-                        {
-                            "type": "string",
-                            "name": "written_decision_type",
-                            "order": 2
-                        },
-                        {
-                            "type": "string",
-                            "name": "authenticate_report_num",
-                            "order": 3
-                        },
-                        {
-                            "type": "string",
-                            "name": "written_decision_parity_bit",
-                            "order": 4
-                        },
-                        {
-                            "type": "string",
-                            "name": "personnel_classify",
-                            "order": 5
-                        },
-                        {
-                            "type": "string",
-                            "name": "driver_license_number",
-                            "order": 6
-                        },
-                        {
-                            "type": "string",
-                            "name": "archive_num",
-                            "order": 7
-                        },
-                        {
-                            "type": "string",
-                            "name": "issue_authority",
-                            "order": 8
-                        },
-                        {
-                            "type": "string",
-                            "name": "allow_drivering_type",
-                            "order": 9
-                        },
-                        {
-                            "type": "string",
-                            "name": "receiver",
-                            "order": 10
-                        },
-                        {
-                            "type": "string",
-                            "name": "residence_district_code",
-                            "order": 11
-                        },
-                    ],
-                    "Database": "raw"
-                },
+                reader: {},
                 formInline:{
                     options:[
                         {

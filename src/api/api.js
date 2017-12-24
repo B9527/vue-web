@@ -17,3 +17,6 @@ export const cleanUpload = params => { return axios.post(`${base}/clean-data/upl
 export const getCleanTaskList = params => { return axios.get(`${base}/clean-data/task/list/`,params).then(res => res.data); };
 export const cleanStatusSubmit = params => {return axios.post(`${base}/clean-data/task/resubmit/`, params).then(res => res.data)};
 export const cleanTaskDelete = params => {return axios.post(`${base}/clean-data/task/delete/`, params).then(res => res.data)};
+export const CleanDetailGet = params => {return axios.get(`${base}/clean-data/task/detail/`, params).then(res => res.data)};
+export const CleanDetailPost = params => {return axios.post(`${base}/clean-data/task/detail/`, params).then(res => res.data)};
+export const CleanMapPost = params => {return axios.post(`${base}/clean-data/task/map_list/`, params).then(res => res.data)};

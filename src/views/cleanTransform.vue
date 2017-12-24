@@ -40,6 +40,8 @@
 
 <script>
 import NavComponent from '@/components/nav_component'
+import { CleanDetailGet } from '../api/api';
+import { CleanDetailPost } from '../api/api';
     export default {
           components: {
               NavComponent,
@@ -51,7 +53,17 @@ import NavComponent from '@/components/nav_component'
         },
         methods: {
             LoadData(){
-                alert("loaddata");
+                CleanDetailGet({params:{id: this.$route.query.id,}}).then(data => {
+                  let { msg, code, result } = data;
+                  if (code !== 200) {
+                    this.$message({
+                    message: msg,
+                    type: 'error',
+                    });
+                  } else {
+                    this.transform = result.transform;
+                  }
+                      });
             },
             TransDelete(index){
                 this.transform.splice(index, 1);
@@ -62,87 +74,29 @@ import NavComponent from '@/components/nav_component'
             },
             TransSave(){
                 let return_obj = this.transform;
-                console.log(JSON.stringify(return_obj));
+                let formData = new FormData();
+                formData.append('transform', JSON.stringify(return_obj));
+                formData.append('id', this.$route.query.id)
+                CleanDetailPost(formData).then(data =>{
+                    let { msg, code, result } = data;
+                    if (code !== 200) {
+                        this.$message({
+                        message: msg,
+                        type: 'error',
+                        });
+                    } else {
+                        this.$message({
+                        message: msg,
+                        type: 'success',
+                                });
+                    }
+                });
 
             },
         },
         data() {
             return {
-                "transform": [
-                    {
-                        "path": "data_transform.common.rename.FieldRenameTransformer",
-                        "params": JSON.stringify({
-                            "mapping_fields": {}
-                        }),
-                        "order": 1
-                    },
-                    {
-                        "path": "data_transform.common.field.FieldStripTansformer",
-                        "params": JSON.stringify({}),
-                        "order": 2
-                    },
-                    {
-                        "path": "data_transform.common.field.FieldConvertNull",
-                        "params": JSON.stringify({
-                            "null_value": "null"
-                        }),
-                        "order": 3
-                    },
-                    {
-                        "path": "data_transform.common.field.DoubleTransformer",
-                        "params": JSON.stringify({
-                            "fields": [
-                                "illegal_score",
-                                "forfeit",
-                                "measured_value",
-                                "standard_value",
-                                "overdue_fine",
-                                "etl_id"
-                            ]
-                        }),
-                        "order": 4
-                    },
-                    {
-                        "path": "data_transform.common.field.DateTransformer",
-                        "params": JSON.stringify({
-                            "fields": [
-                                {
-                                    "name": "pay_money_date",
-                                    "format": "%Y/%m/%d"
-                                }
-                            ]
-                        }),
-                        "order": 5
-                    },
-                    {
-                        "path": "data_transform.common.field.TimestampTransformer",
-                        "params": JSON.stringify({
-                            "fields": [
-                                {
-                                    "name": "illegal_time",
-                                    "format": "%Y/%m/%d %H:%M:%S"
-                                },
-                                {
-                                    "name": "update_dispose_time",
-                                    "format": "%Y/%m/%d %H:%M:%S"
-                                },
-                                {
-                                    "name": "regist_time",
-                                    "format": "%Y/%m/%d %H:%M:%S"
-                                },
-                                {
-                                    "name": "update_time",
-                                    "format": "%Y/%m/%d %H:%M:%S"
-                                },
-                                {
-                                    "name": "etl_date",
-                                    "format": "%Y/%m/%d %H:%M:%S"
-                                }
-                            ]
-                        }),
-                        "order": 6
-                    }
-                ],
+                "transform": [],
             }
     }
     }
