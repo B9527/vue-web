@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let base = 'http://127.0.0.1:8000';
+let base = 'http://10.10.30.70:8000';
 let config = {
     headers: {
       'Content-Type': 'multipart/form-data'

@@ -45,8 +45,8 @@
                             </tbody>
                         </table>
                     </div>
-                     <el-button type="primary" @click="ReaderAdd">新增</el-button>
-                     <el-button type="success" @click="ReaderSave">保存</el-button>
+                     <el-button type="primary" @click="ReaderAdd" style="margin-left:40%">新增</el-button>
+                     <el-button type="success" @click="ReaderSave" style="margin-left:5%" >保存</el-button>
                 </form>
           </div>
           <div class="col-lg-6" style="float: left;border:1px solid #DDDDDD;min-height:800px;margin-bottom: 100px;">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         <!-- <el-button type="primary">新增</el-button> -->
-                        <el-button type="success" @click="MapDictSave">保存</el-button>
+                        <el-button type="success" @click="MapDictSave" style="margin-left:40%">保存</el-button>
 
                 </form>
             </div>

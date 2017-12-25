@@ -1,7 +1,7 @@
 <template>
   <div>
       <NavComponent></NavComponent>
-     <div class="col-lg-10" style="float: left;border:1px solid #DDDDDD;min-height:800px;margin-bottom: 100px;margin-left:10%">
+     <div class="col-lg-10" style="float: left;border:1px solid #DDDDDD;margin-bottom: 100px;margin-left:10%">
                  <form id="transform_table_id">
         <div class="" style="text-align: center"><h2>Transform</h2></div>
         <div class="form-group row" style="margin-top: 85px;">
@@ -27,12 +27,8 @@
                 </tbody>
             </table>
         </div>
-
-        <br/>
-         <el-button type="primary" @click="TransAdd">新增</el-button>
-        <el-button type="success" @click="TransSave">保存</el-button>
-
-
+        <el-button type="primary" @click="TransAdd" style="margin-left:40%">新增</el-button>
+        <el-button type="success" @click="TransSave" style="margin-left:5%">保存</el-button>
     </form>
             </div>
       </div>   
@@ -62,6 +58,7 @@ import { CleanDetailPost } from '../api/api';
                     });
                   } else {
                     this.transform = result.transform;
+                    
                   }
                       });
             },

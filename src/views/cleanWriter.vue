@@ -42,9 +42,10 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <el-button type="primary" @click="WriterAdd" style="margin-left:40%">新增</el-button>
+                        <el-button type="success" @click="WriterSave" style="margin-left:5%">保存</el-button>
                     </div>
-                    <el-button type="primary" @click="WriterAdd">新增</el-button>
-                    <el-button type="success" @click="WriterSave">保存</el-button>
+                    
                 </form>
           </div>
       </div>
