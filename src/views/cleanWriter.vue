@@ -5,7 +5,7 @@
           <div class="col-lg-8" style="border:1px solid #DDDDDD;margin-bottom: 100px;margin-left:10%">
                 <form id="reader_table_id">
                     <div class="" style="text-align: center">
-                        <h2>Writer Data</h2>
+                        <h2>Success Writer Data</h2>
                     </div>
                     <div class="form-group row" style="">
                         <label for="input_database" class="col-sm-2 col-form-label">Database:</label>

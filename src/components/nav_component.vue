@@ -13,9 +13,9 @@ export default {
   data() {
       return {
           nav_list:[
-              {"link":"/cleanHome", "name":"Home", "class_name": "nav-link "},
               {"link":"/cleanReader", "name":"Reader", "class_name": "nav-link"},
-              {"link":"/cleanWriter", "name":"Writer", "class_name": "nav-link"},
+              {"link":"/cleanWriter", "name":"SuccessWriter", "class_name": "nav-link"},
+              {"link":"/cleanError", "name":"ErrorWriter", "class_name": "nav-link "},
               {"link":"/cleanTransform", "name":"Transform", "class_name": "nav-link"},
           ]
       }

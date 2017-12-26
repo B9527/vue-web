@@ -20,3 +20,4 @@ export const cleanTaskDelete = params => {return axios.post(`${base}/clean-data/
 export const CleanDetailGet = params => {return axios.get(`${base}/clean-data/task/detail/`, params).then(res => res.data)};
 export const CleanDetailPost = params => {return axios.post(`${base}/clean-data/task/detail/`, params).then(res => res.data)};
 export const CleanMapPost = params => {return axios.post(`${base}/clean-data/task/map_list/`, params).then(res => res.data)};
+export const HiveTableList =  params => {return axios.get(`${base}/import-data/hive_table_list/`, params).then(res => res.data)};

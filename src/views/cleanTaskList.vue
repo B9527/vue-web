@@ -3,9 +3,9 @@
   <div>
     <el-button @click="DeleteSelection" >删除</el-button>
     <el-button @click="SubmitSelection">执行</el-button>
-    <el-input style="width:160px; float:left; margin-left:5%" v-model="tableData.search"></el-input><el-button type="primary" icon="el-icon-search" style="float: left;" @click="GoSearch">搜索</el-button>
+    <el-input style="width:160px; float:left; margin-left:5%" v-model="search"></el-input><el-button type="primary" icon="el-icon-search" style="float: left;" @click="GoSearch">搜索</el-button>
   <el-table :data="tableData" style="width: 100%" border :row-class-name="tableRowClassName" element-loading-text="拼命加载中"
-  show-overflow-tooltip  @selection-change="handleSelectionChange" slot="empty" @row-dblclick="dataGotoDetail">
+  show-overflow-tooltip  @selection-change="handleSelectionChange" slot="empty" @row-dblclick="dataGotoDetail" @filter-change="filterChange">
     <el-table-column
       type="selection"
       width="55">
@@ -37,9 +37,7 @@
           { text: 'fail', value: 'fail' },
           { text: 'success', value: 'success' },
       
-      ]"
-      :filter-method="filterTag"
-      filter-placement="bottom-end">
+      ]"  :filter-multiple=false>
       <template slot-scope="scope">
         <el-tag
           type=""
@@ -90,26 +88,12 @@
 	},
 	mounted: function() {
             this.$nextTick(function () {
-                getCleanTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize, status:this.status}}).then(data => {
-						      //NProgress.done();
-                  let { msg, code, result } = data;
-                  if (code !== 200) {
-                    this.$message({
-                    message: msg,
-                    type: 'error',
-                    });
-                  } else {
-                    this.tableData = result.task_list;
-                    this.currentPage4 = result.pageNum
-                    this.pageSize = result.pageSize
-                    this.total = result.total
-                  }
-                      });
+               this.loadData();
                 })
             },
     methods: {
       loadData: function(){
-          getCleanTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize,status:this.status}}).then(data => {
+          getCleanTaskList({params:{pageNum:this.currentPage, pageSize:this.pageSize,status:this.status,search_data:this.search}}).then(data => {
 						      //NProgress.done();
                   let { msg, code, result } = data;
                   if (code !== 200) {
@@ -122,6 +106,7 @@
                     this.currentPage4 = result.pageNum
                     this.pageSize = result.pageSize
                     this.total = result.total
+
                   }
                       });
       },
@@ -133,11 +118,13 @@
         this.currentPage = val;
         this.loadData();
       },
-      filterTag(value, row) {
-        this.status = value;
-        // this.total = (row.status === value).length
-        // console.log((row.status === value).length)
-        return row.status === value;
+       filterChange(filters){
+        var status = filters[Object.keys(filters)][0];
+        this .currentPage = 1;
+        this.status = status;
+        this.search = ""
+        this.loadData();
+
       },
       indexMethod(index) {
         var base_bum = (this.currentPage-1)*(this.pageSize);
@@ -221,29 +208,14 @@
 	  },
 	  dataGotoDetail(row){
         var task_id = row.id;
-        var router_string = "/cleanHome?id=" +task_id;
+        var router_string = "/cleanReader?id=" +task_id;
         this.$router.push(router_string);
 			
 
     },
     GoSearch(){
-      let search_data = this.tableData.search;
-      getCleanTaskList({params:{search_data:search_data,}}).then(data => {
-						      //NProgress.done();
-                  let { msg, code, result } = data;
-                  if (code !== 200) {
-                    this.$message({
-                    message: msg,
-                    type: 'error',
-                    });
-                  } else {
-                    this.tableData = result.task_list;
-                    this.currentPage4 = result.pageNum
-                    this.pageSize = result.pageSize
-                    this.total = result.total
-                  }
-              });
-
+      this.pageNum = 1;
+      this.loadData();
     }
     }
   }

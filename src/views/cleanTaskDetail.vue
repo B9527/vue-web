@@ -3,19 +3,19 @@
   <div>
       <NavComponent></NavComponent>
       <div>
-          <div class="col-lg-6" style="float: left;border:1px solid #DDDDDD;min-height:800px;margin-bottom: 100px;">
+          <div class="col-lg-8" style="margin-left:10%;border:1px solid #DDDDDD;min-height:800px;margin-bottom: 100px;">
                 <form id="reader_table_id">
                     <div class="" style="text-align: center">
-                        <h2>Source Data</h2>
+                        <h2>Error Writer Data</h2>
                     </div>
                     <div class="form-group row">
                         <label for="input_database" class="col-sm-2 col-form-label">Database:</label>
                         <div class="col-sm-10">
-                            <input name="database" class="form-control" id="input_database" v-model="reader.database">
+                            <input name="database" class="form-control" id="input_database" v-model="errorWriter.database">
                         </div>
                         <label for="input_table" class="col-sm-2 col-form-label">Table:</label>
                         <div class="col-sm-10">
-                            <input name="table" class="form-control" id="input_table" v-model="reader.table">
+                            <input name="table" class="form-control" id="input_table" v-model="errorWriter.table">
                         </div>
                         <br/>
                         <table class="table table-striped" id="clean_config_reader_writer">
@@ -27,7 +27,7 @@
                                     <th>option</th>
                                 </tr>
                             </thead>
-                            <tbody id="reader_content" v-for="(read_field, index) in reader.fields" :key=''> 
+                            <tbody id="reader_content" v-for="(read_field, index) in errorWriter.fields" :key=''> 
                                 <tr >
                                     <td><p type="index"  style="width: 60px">{{index+1}}</p</td>
                                     <td><el-input  v-model="read_field.name" type="text"></el-input></td>
@@ -49,7 +49,7 @@
                      <el-button type="success" @click="ReaderSave" style="margin-left:5%" >保存</el-button>
                 </form>
           </div>
-          <div class="col-lg-6" style="float: left;border:1px solid #DDDDDD;min-height:800px;margin-bottom: 100px;">
+          <!-- <div class="col-lg-6" style="float: left;border:1px solid #DDDDDD;min-height:800px;margin-bottom: 100px;">
                 <form id="writer_table_id">
                     <div class="" style="text-align: center"><h2>Map Dict</h2></div>
                         <div class="form-group row" >
@@ -88,11 +88,10 @@
                                 </table>
                             </div>
                         </div>
-                        <!-- <el-button type="primary">新增</el-button> -->
                         <el-button type="success" @click="MapDictSave" style="margin-left:40%">保存</el-button>
 
                 </form>
-            </div>
+            </div> -->
       </div>
   </div>
 </template>
@@ -118,22 +117,21 @@
                     type: 'error',
                     });
                   } else {
-                    this.reader = result.reader;
-                    this.map_list = result.map_list;
+                    this.errorWriter = result.errorWriter;
                   }
                       });
             },
             ReaderDelete(index){
-                this.reader.fields.splice(index, 1);  
+                this.errorWriter.fields.splice(index, 1);  
             },
             ReaderAdd(){
-                let add_item =  {"type": "", "name": "", "order": this.reader.fields.length +1 }
-                this.reader.fields.push(add_item);
+                let add_item =  {"type": "", "name": "", "order": this.errorWriter.fields.length +1 }
+                this.errorWriter.fields.push(add_item);
             },
             ReaderSave(){
-                let return_obj = this.reader;
+                let return_obj = this.errorWriter;
                 let formData = new FormData();
-                formData.append('reader', JSON.stringify(return_obj));
+                formData.append('errorWriter', JSON.stringify(return_obj));
                 formData.append('id', this.$route.query.id)
                 CleanDetailPost(formData).then(data =>{
                     let { msg, code, result } = data;
@@ -187,11 +185,11 @@
         },
         data() {
             return {
-                map_list: {
-                    key_list: [],
-                    val_list: [],
-                },
-                reader: {},
+                // map_list: {
+                //     key_list: [],
+                //     val_list: [],
+                // },
+                errorWriter: {},
                 formInline:{
                     options:[
                         {

@@ -14,6 +14,7 @@ import cleanTaskDetail from '@/views/cleanTaskDetail'
 import cleanReader from '@/views/cleanReader'
 import cleanWriter from '@/views/cleanWriter'
 import cleanTransform from '@/views/cleanTransform'
+import cleanHiveTable from '@/views/cleanHiveTable'
 
 
 Vue.use(Router)
@@ -37,9 +38,10 @@ export default new Router({
       name: '数据清洗模块',
       iconCls: 'el-icon-setting',
       children: [
-          { path: '/cleanUpload', component: cleanUpload, name: '上传清洗结构' },
+          // { path: '/cleanUpload', component: cleanUpload, name: '清洗数据导入' },
+          { path: '/cleanHiveTable', component: cleanHiveTable, name: '清洗数据导入' },
           { path: '/cleanTaskList', component: cleanTaskList, name: '清洗任务列表' },
-          { path: '/cleanHome', component: cleanTaskDetail, name: '清洗任务详情', hidden: true },
+          { path: '/cleanError', component: cleanTaskDetail, name: '清洗任务详情', hidden: true },
           {path: '/cleanReader', component: cleanReader, name: 'reader', hidden: true},
           {path: '/cleanWriter', component: cleanWriter, name: 'writer', hidden: true},
           {path: '/cleanTransform', component: cleanTransform, name: 'trandform', hidden: true},
