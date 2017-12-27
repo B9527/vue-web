@@ -12,8 +12,6 @@
     </el-table-column>
     <el-table-column type="index" :index="indexMethod" label="index" width="60">
     </el-table-column>
-    <el-table-column prop="file_name" label="file_name" width="100">
-    </el-table-column>
     <el-table-column prop="database" label="database">
     </el-table-column>
 	 <el-table-column prop="table" label="table">

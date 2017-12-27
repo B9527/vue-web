@@ -15,6 +15,11 @@ import cleanReader from '@/views/cleanReader'
 import cleanWriter from '@/views/cleanWriter'
 import cleanTransform from '@/views/cleanTransform'
 import cleanHiveTable from '@/views/cleanHiveTable'
+import editHiveTable from '@/views/editHiveTable'
+import cleanSettingReader from '@/views/cleanSettingReader'
+import cleanSettingTransForm from '@/views/cleanSettingTransForm'
+import cleanSettingSucWriter from '@/views/cleanSettingSucWriter'
+import cleanSettingEroWriter from '@/views/cleanSettingEroWriter'
 
 
 Vue.use(Router)
@@ -45,6 +50,12 @@ export default new Router({
           {path: '/cleanReader', component: cleanReader, name: 'reader', hidden: true},
           {path: '/cleanWriter', component: cleanWriter, name: 'writer', hidden: true},
           {path: '/cleanTransform', component: cleanTransform, name: 'trandform', hidden: true},
+          {path: '/editeditHiveTable', component: editHiveTable, name: '编辑hive表', hidden: true},
+          {path: '/settingCleanReader', component: cleanSettingReader, name: '设置Reader', hidden: true},
+          {path: '/settingCleanReader', component: cleanSettingReader, name: '设置Reader', hidden: true},
+          {path: '/settingCleanTransForm', component: cleanSettingTransForm, name: '设置TrandForm', hidden: true},
+          {path: '/settingCleanSucWriter', component: cleanSettingSucWriter, name: '设置SucessWriter', hidden: true},
+          {path: '/cleanSettingEroWriter', component: cleanSettingEroWriter, name: '设置ErrorWriter', hidden: true},
       ]
     },
     {

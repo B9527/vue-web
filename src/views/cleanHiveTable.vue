@@ -19,7 +19,7 @@
                 <template slot-scope="scope">
                     <el-popover trigger="hover" placement="top">
                         
-                        <el-table :data="scope.row.fields" border  stripe style="width: 100%;">
+                        <el-table :data="scope.row.fields" border  stripe style="width: 800px;">
                             <el-table-column prop="column_index" label="column_index">
                             </el-table-column>
                             <el-table-column prop="column" label="column">
@@ -27,8 +27,6 @@
                             <el-table-column prop="column_type" label="column_type">
                             </el-table-column>
                             <el-table-column prop="column_comment" label="column_comment">
-                            </el-table-column>
-                            <el-table-column prop="time_format" label="time_format">
                             </el-table-column>
                         </el-table>
                         
@@ -48,7 +46,7 @@
                     <el-button
                     size="mini"
                     type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">导入</el-button>
+                    @click="handleDelete(scope.$index, scope.row)">清洗</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -69,50 +67,51 @@
 
 <script>
  import { HiveTableList } from '../api/api';
+ import { HiveTableToCleanTask } from '../api/api';
   export default {
     data() {
       return {
         tableData: [
-             {
-                "table": "Person_AAA_Info_policeman9",
-                "table_comment": "警员信息9",
-                "database": "raw",
-                 "fields": [
-                    {
-                        "column": "nation",
-                        "time_format": null,
-                        "column_index": 24,
-                        "column_type": "string",
-                        "column_comment": "国籍"
-                    },
-                    {
-                        "column": "order_time",
-                        "time_format": null,
-                        "column_index": 23,
-                        "column_type": "string",
-                        "column_comment": "订票时间"
-                    }]
-            },
-            {
-                "table": "Person_AAA_Info_policeman9",
-                "table_comment": "警员信息9",
-                "database": "raw",
-                 "fields": [
-                    {
-                        "column": "nation",
-                        "time_format": null,
-                        "column_index": 24,
-                        "column_type": "string",
-                        "column_comment": "国籍"
-                    },
-                    {
-                        "column": "order_time",
-                        "time_format": null,
-                        "column_index": 23,
-                        "column_type": "string",
-                        "column_comment": "订票时间"
-                    }]
-            },
+            //  {
+            //     "table": "Person_AAA_Info_policeman9",
+            //     "table_comment": "警员信息9",
+            //     "database": "raw",
+            //      "fields": [
+            //         {
+            //             "column": "nation",
+            //             "time_format": null,
+            //             "column_index": 24,
+            //             "column_type": "string",
+            //             "column_comment": "国籍"
+            //         },
+            //         {
+            //             "column": "order_time",
+            //             "time_format": null,
+            //             "column_index": 23,
+            //             "column_type": "string",
+            //             "column_comment": "订票时间"
+            //         }]
+            // },
+            // {
+            //     "table": "Person_AAA_Info_policeman9",
+            //     "table_comment": "警员信息9",
+            //     "database": "raw",
+            //      "fields": [
+            //         {
+            //             "column": "nation",
+            //             "time_format": null,
+            //             "column_index": 24,
+            //             "column_type": "string",
+            //             "column_comment": "国籍"
+            //         },
+            //         {
+            //             "column": "order_time",
+            //             "time_format": null,
+            //             "column_index": 23,
+            //             "column_type": "string",
+            //             "column_comment": "订票时间"
+            //         }]
+            // },
         ],
         currentPage: 1,
         pageSize: 20,
@@ -149,10 +148,33 @@
     
         },
         handleEdit(index, row) {
-            console.log(index, row);
+            let database = row.database;
+            let table = row.table;
+            let url_path = "/editeditHiveTable?database="+database+"&table="+table;
+            this.$router.push(url_path);
         },
         handleDelete(index, row) {
-            console.log(index, row);
+            let database = row.database;
+            let table = row.table;
+            let formData = new FormData();
+            formData.append('database', database);
+            formData.append('table', table);
+            let postParams = formData
+
+            HiveTableToCleanTask(postParams).then(data => {
+						      //NProgress.done();
+                  let { msg, code, result } = data;
+                  if (code !== 200) {
+                    this.$message({
+                    message: msg,
+                    type: 'error',
+                    });
+                  } else {
+                    let clean_task_id = result.id
+                    let url_path = "/settingCleanReader?id=" + clean_task_id;
+                    this.$router.push(url_path);
+                  }
+                      });
         },
         handleSizeChange(val) {
             this.pageSize = val;
