@@ -17,13 +17,21 @@
             </el-table-column>
             <el-table-column label="table" >
                 <template slot-scope="scope">
-                    <el-popover trigger="click" placement="top">
-                        <!-- <div v-for="item in tableData" :key="item.table_comment">  -->
-                        <!-- <el-table :data="tableData" border  stripe style="width: 100%;"> -->
-                            <!-- <el-table-column prop="table_comment" label="table_comment"> -->
-                            <!-- </el-table-column> -->
-                        <!-- </el-table> -->
-                        <!-- </div> -->
+                    <el-popover trigger="hover" placement="top">
+                        
+                        <el-table :data="scope.row.fields" border  stripe style="width: 100%;">
+                            <el-table-column prop="column_index" label="column_index">
+                            </el-table-column>
+                            <el-table-column prop="column" label="column">
+                            </el-table-column>
+                            <el-table-column prop="column_type" label="column_type">
+                            </el-table-column>
+                            <el-table-column prop="column_comment" label="column_comment">
+                            </el-table-column>
+                            <el-table-column prop="time_format" label="time_format">
+                            </el-table-column>
+                        </el-table>
+                        
                     <div slot="reference" class="name-wrapper">
                         <el-tag size="medium">{{ scope.row.table }}</el-tag>
                     </div>
@@ -68,12 +76,42 @@
              {
                 "table": "Person_AAA_Info_policeman9",
                 "table_comment": "警员信息9",
-                "database": "raw"
+                "database": "raw",
+                 "fields": [
+                    {
+                        "column": "nation",
+                        "time_format": null,
+                        "column_index": 24,
+                        "column_type": "string",
+                        "column_comment": "国籍"
+                    },
+                    {
+                        "column": "order_time",
+                        "time_format": null,
+                        "column_index": 23,
+                        "column_type": "string",
+                        "column_comment": "订票时间"
+                    }]
             },
             {
                 "table": "Person_AAA_Info_policeman9",
                 "table_comment": "警员信息9",
-                "database": "raw"
+                "database": "raw",
+                 "fields": [
+                    {
+                        "column": "nation",
+                        "time_format": null,
+                        "column_index": 24,
+                        "column_type": "string",
+                        "column_comment": "国籍"
+                    },
+                    {
+                        "column": "order_time",
+                        "time_format": null,
+                        "column_index": 23,
+                        "column_type": "string",
+                        "column_comment": "订票时间"
+                    }]
             },
         ],
         currentPage: 1,
@@ -127,9 +165,6 @@
         GoSearch(){
             this.pageNum = 1;
             this.loadData();
-        },
-        getTableInfo(){
-            console.log('ok');
         },
     }
   }

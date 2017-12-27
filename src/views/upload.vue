@@ -1,4 +1,4 @@
-<<template>
+<template>
 <div id="upload_form" style="margin-top:5%;">
     <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="请选择文件类型：">
