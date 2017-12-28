@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let base = 'http://10.10.30.70:8000';
+let base = 'http://127.0.0.1:8000';
 let config = {
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -23,3 +23,8 @@ export const CleanMapPost = params => {return axios.post(`${base}/clean-data/tas
 export const HiveTableList =  params => {return axios.get(`${base}/import-data/hive_table_list/`, params).then(res => res.data)};
 export const HiveTableToCleanTask =  params => {return axios.post(`${base}/clean-data/htable_task/`, params).then(res => res.data)};
 export const getCleanBase =  params => {return axios.get(`${base}/clean-data/clean_baseTrans/`, params).then(res => res.data)};
+export const postCleanBase =  params => {return axios.post(`${base}/clean-data/clean_baseTrans/`, params).then(res => res.data)};
+export const getCleanExtent =  params => {return axios.get(`${base}/clean-data/clean_extentTrans/`, params).then(res => res.data)};
+export const postCleanExtent =  params => {return axios.post(`${base}/clean-data/clean_extentTrans/`, params).then(res => res.data)};
+export const getCleanCustom=  params => {return axios.get(`${base}/clean-data/clean_customTrans/`, params).then(res => res.data)};
+export const postCleanCustom =  params => {return axios.post(`${base}/clean-data/clean_customTrans/`, params).then(res => res.data)};
